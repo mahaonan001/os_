@@ -1,0 +1,72 @@
+Tue Jun 11 15:19:11 2024
+ INFO: request:GET / HTTP/1.1**Host: localhost:8181**Connection: keep-alive**Cache-Control: max-age=0**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Linux"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:1
+Tue Jun 11 15:19:11 2024
+ INFO: SEND:index.html:1
+Tue Jun 11 15:19:11 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 303
+Connection: close
+Content-Type: text/html
+
+:1
+Tue Jun 11 15:19:11 2024
+ INFO: request:GET /pic.jpg HTTP/1.1**Host: localhost:8181**Connection: keep-alive**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**sec-ch-ua-platform: "Linux"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://localhost:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:2
+Tue Jun 11 15:19:11 2024
+ INFO: SEND:pic.jpg:2
+Tue Jun 11 15:19:11 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 234411
+Connection: close
+Content-Type: image/jpg
+
+:2
+Tue Jun 11 15:19:11 2024
+ INFO: request:GET /favicon.ico HTTP/1.1**Host: localhost:8181**Connection: keep-alive**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**sec-ch-ua-platform: "Linux"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://localhost:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:3
+Tue Jun 11 15:19:11 2024
+ INFO: SEND:favicon.ico:3
+Tue Jun 11 15:19:11 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 67646
+Connection: close
+Content-Type: image/ico
+
+:3
+Tue Jun 11 16:21:58 2024
+ INFO: request:GET / HTTP/1.1**Host: 127.0.0.1:8181**Connection: keep-alive**Cache-Control: max-age=0**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Linux"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:1
+Tue Jun 11 16:21:58 2024
+ INFO: SEND:index.html:1
+Tue Jun 11 16:21:58 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 303
+Connection: close
+Content-Type: text/html
+
+:1
+Tue Jun 11 16:21:58 2024
+ INFO: request:GET /pic.jpg HTTP/1.1**Host: 127.0.0.1:8181**Connection: keep-alive**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**sec-ch-ua-platform: "Linux"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://127.0.0.1:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:2
+Tue Jun 11 16:21:58 2024
+ INFO: SEND:pic.jpg:2
+Tue Jun 11 16:21:58 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 234411
+Connection: close
+Content-Type: image/jpg
+
+:2
+Tue Jun 11 16:21:58 2024
+ INFO: request:GET /favicon.ico HTTP/1.1**Host: 127.0.0.1:8181**Connection: keep-alive**sec-ch-ua: "Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0**sec-ch-ua-platform: "Linux"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://127.0.0.1:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:3
+Tue Jun 11 16:21:58 2024
+ INFO: SEND:favicon.ico:3
+Tue Jun 11 16:21:58 2024
+ INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 67646
+Connection: close
+Content-Type: image/ico
+
+:3

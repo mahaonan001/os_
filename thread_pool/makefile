@@ -1,5 +1,7 @@
 build:
-	gcc -o server main.c
+	ht
+test:
+	gcc -o test main.c
 run:
 	./server 8181 ./file
 pfrun:

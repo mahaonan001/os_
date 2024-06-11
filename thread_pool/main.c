@@ -58,10 +58,7 @@ int create_thread(struct threadpool *pool, struct thread **pthread, int id);
 void destory_taskqueue(taskqueue *queue);
 void thread_do(thread* pthread);
 task* take_taskqueue(taskqueue *queue);
-int main()
-{
-  return 0;
-}
+
 void init_taskqueue(taskqueue *queue)
 {
   if (queue == NULL)
@@ -78,7 +75,7 @@ void init_taskqueue(taskqueue *queue)
   // 初始化 staconv_ 中的互斥锁和条件变量
   pthread_mutex_init(&(staconv_->mutex), NULL);
   pthread_cond_init(&(staconv_->cond), NULL);
-  staconv_->status = 0;
+  staconv_->status = false;
 
   // 将 staconv_ 赋值给队列的 has_jobs 成员
   queue->has_jobs = staconv_;
@@ -94,7 +91,7 @@ struct threadpool *initThreadPool(int num_threads)
 {
   threadpool *pool;
   pool = (threadpool *)malloc(sizeof(threadpool));
-  pool->num_threads = num_threads;
+  pool->num_threads = 0;
   pool->num_working = 0;
 
   pthread_mutex_init(&(pool->thcont_lock), NULL);
@@ -110,6 +107,7 @@ struct threadpool *initThreadPool(int num_threads)
   }
   while (pool->num_threads != num_threads)
   {
+    // printf(".....\n");
   }
   return pool;
 }
@@ -120,6 +118,7 @@ void push_taskqueue(taskqueue *queue, task *curtask)
   {
     queue->front = curtask;
     queue->end = curtask;
+    queue->has_jobs->status=true;
   }
   else
   {
@@ -186,15 +185,26 @@ int create_thread(struct threadpool *pool, struct thread **pthread, int id)
   }
   (*pthread)->pool = pool;
   (*pthread)->id = id;
+  pthread_mutex_lock(&pool->thcont_lock);
+  (pool->num_threads)++;
+  pthread_mutex_unlock(&pool->thcont_lock);
+  
   pthread_create(&(*pthread)->pthread,NULL,(void*)thread_do,(*pthread));
-  pthread_detach((*pthread)->pthread);
+  
+  pthread_detach((*pthread)->pthread);//无需等待
   return 0;
 }
 
 task* take_taskqueue(taskqueue *queue){
+  if(!queue->has_jobs->status){
+    return NULL;
+  }
   task* task_ = queue->front;
   queue->front = task_->next;
   (queue->len)--;
+  if(queue->len=0){
+    queue->has_jobs->status=false;
+  }
   return task_;
 }
 
@@ -204,17 +214,18 @@ void thread_do(thread* pthread){
   prctl(PR_SET_NAME,thread_name);
 
   threadpool* pool = pthread->pool;
-  for(int i=0;i<sizeof(pool->threads)/sizeof(pool->threads[0]);i++){
-    (pool->num_threads)++;
-  }
+  ////////
+  ////////
   while(pool->is_alive){
-    if(pool->queue.len!=0){
-      waitThreadPool(pool);
-    }
+    /////////如果队列还有任务，则继续运行任务
+    // if(pool->queue.len!=0){
+    //   waitThreadPlool(pool);
+    // }
+    // //////////
     if(pool->is_alive){
-      for(int i=0;i<pool->queue.len;i++){
-        (pool->num_working)++;
-      }
+      //////执行到此，表明线程还在工作，需要对工作线程数量进行统计
+      (pool->num_working)++;
+      ////////
       void(*func)(void*);
       void *arg;
       task* curtask = take_taskqueue(&pool->queue);
@@ -222,9 +233,27 @@ void thread_do(thread* pthread){
         func = curtask->function;
         arg = curtask->arg;
         func(arg);
+        free(curtask->function);
+        free(curtask->arg);
         free(curtask);
       }
+      pthread_mutex_lock(&pool->thcont_lock);
+      pool->num_working--;
+      pthread_mutex_lock(&pool->thcont_lock);
+      pthread_mutex_lock(&pool->queue.mutex);
+      pool->queue.len--;
+      pthread_mutex_unlock(&pool->queue.mutex);
+      if(pool->num_working==0){
+        waitThreadPool(pool);
+      }
     }
-
   }
+  
+}
+
+int main()
+{
+  threadpool pool =*initThreadPool(10);
+  printf("%d\n",pool.num_threads);
+  return 0;
 }
