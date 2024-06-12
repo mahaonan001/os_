@@ -1,259 +1,202 @@
-#include <pthread.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include<sys/prctl.h>
-typedef struct staconv
-{
-  /* data */
-  pthread_mutex_t mutex;
-  pthread_cond_t cond;
-  int status;
+#include <pthread.h>
+typedef struct staconv {
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+    bool status;
 } staconv;
 
-typedef struct task
-{
-  struct task *next;
-  void (*function)(void *arg);
-  void *arg;
+typedef struct task {
+    struct task *next;
+    void (*function)(void *arg);
+    void *arg;
 } task;
 
-typedef struct taskqueue // 任务队列
-{
-  /* data */
-  pthread_mutex_t mutex;
-  task *front;
-  task *end;
-  staconv *has_jobs;
-  int len;
+typedef struct taskqueue {
+    pthread_mutex_t mutex;
+    task *front;
+    task *end;
+    staconv *has_jobs;
+    int len;
 } taskqueue;
 
-typedef struct thread
-{
-  /* data */
-  int id;
-  pthread_t pthread;       // 线程本体
-  struct threadpool *pool; // 所属线程池
+typedef struct thread {
+    int id;
+    pthread_t pthread;
+    struct threadpool *pool;
 } thread;
 
-typedef struct threadpool
-{
-  /* data */
-  thread **threads;
-  volatile int num_threads;        // 线程数
-  volatile int num_working;        // 运行的线程数
-  pthread_mutex_t thcont_lock;     // 锁
-  pthread_cond_t threads_all_idle; // 销毁锁的条件变量
-  taskqueue queue;
-  volatile bool is_alive;
+typedef struct threadpool {
+    thread **threads;
+    volatile int num_threads;
+    volatile int num_working;
+    pthread_mutex_t thcont_lock;
+    pthread_cond_t threads_all_idle;
+    taskqueue queue;
+    volatile bool is_alive;
 } threadpool;
+
 void init_taskqueue(taskqueue *queue);
 struct threadpool *initThreadPool(int num_threads);
 void push_taskqueue(taskqueue *queue, task *curtask);
 void addTask2ThreadPool(threadpool *pool, task *curtask);
 void waitThreadPool(threadpool *pool);
-void destoryThreadPool(threadpool *pool);
+void destroyThreadPool(threadpool *pool);
 int getNumofThreadWorking(threadpool *pool);
 int create_thread(struct threadpool *pool, struct thread **pthread, int id);
-void destory_taskqueue(taskqueue *queue);
-void thread_do(thread* pthread);
+void destroy_taskqueue(taskqueue *queue);
 task* take_taskqueue(taskqueue *queue);
+void *thread_do(void *arg);
 
-void init_taskqueue(taskqueue *queue)
-{
-  if (queue == NULL)
-  {
-    return; // 如果传入的队列指针为空，则直接返回
-  }
-  // 分配内存给 staconv 结构体，并检查是否分配成功
-  staconv *staconv_ = malloc(sizeof(struct staconv));
-  if (staconv_ == NULL)
-  {
-    perror("Failed to allocate memory for staconv");
-    exit(EXIT_FAILURE); // 内存分配失败，退出程序
-  }
-  // 初始化 staconv_ 中的互斥锁和条件变量
-  pthread_mutex_init(&(staconv_->mutex), NULL);
-  pthread_cond_init(&(staconv_->cond), NULL);
-  staconv_->status = false;
-
-  // 将 staconv_ 赋值给队列的 has_jobs 成员
-  queue->has_jobs = staconv_;
-
-  // 初始化任务队列的互斥锁
-  pthread_mutex_init(&(queue->mutex), NULL);
-  queue->front = NULL;
-  queue->end = NULL;
-  queue->len = 0;
+void init_taskqueue(taskqueue *queue) {
+    queue->len = 0;
+    queue->front = NULL;
+    queue->end = NULL;
+    queue->has_jobs = (staconv *)malloc(sizeof(staconv));
+    pthread_mutex_init(&(queue->mutex), NULL);
+    pthread_mutex_init(&(queue->has_jobs->mutex), NULL);
+    pthread_cond_init(&(queue->has_jobs->cond), NULL);
+    queue->has_jobs->status = false;
 }
 
-struct threadpool *initThreadPool(int num_threads)
-{
-  threadpool *pool;
-  pool = (threadpool *)malloc(sizeof(threadpool));
-  pool->num_threads = 0;
-  pool->num_working = 0;
-
-  pthread_mutex_init(&(pool->thcont_lock), NULL);
-  pthread_cond_init(&(pool->threads_all_idle), NULL);
-
-  init_taskqueue(&pool->queue);
-
-  pool->threads = malloc(num_threads * sizeof(struct thread *));
-
-  for (int i = 0; i < num_threads; ++i)
-  {
-    create_thread(pool,&pool->threads[i],i);
-  }
-  while (pool->num_threads != num_threads)
-  {
-    // printf(".....\n");
-  }
-  return pool;
-}
-
-void push_taskqueue(taskqueue *queue, task *curtask)
-{
-  if (queue->len == 0)
-  {
-    queue->front = curtask;
-    queue->end = curtask;
-    queue->has_jobs->status=true;
-  }
-  else
-  {
-    queue->end->next = curtask;
-    queue->end = curtask;
-  }
-  pthread_mutex_lock(&queue->mutex);
-  queue->len += 1;
-  pthread_mutex_unlock(&queue->mutex);
-}
-
-void addTask2ThreadPool(threadpool *pool, task *curtask)
-{
-  push_taskqueue(&pool->queue, curtask);
-}
-
-void waitThreadPool(threadpool *pool)
-{
-  pthread_mutex_lock(&pool->thcont_lock);
-  while (pool->queue.len || pool->num_working)
-  {
-    pthread_cond_wait(&pool->threads_all_idle, &pool->thcont_lock);
-  }
-  pthread_mutex_unlock(&pool->thcont_lock);
-}
-
-void destoryThreadPool(threadpool *pool)
-{
-
-  waitThreadPool(pool);
-
-  destory_taskqueue(&pool->queue);
-  for (int i = 0; i < pool->num_threads; ++i)
-  {
-    free(pool->threads[i]);
-  }
-  free(pool);
-}
-int getNumofThreadWorking(threadpool *pool)
-{
-  return pool->num_working;
-}
-
-void destory_taskqueue(taskqueue *queue){
-  free(queue->has_jobs);
-  
-  while(queue->front!=queue->end){
-    task * task_=queue->front;
-    task *se_task = queue->front->next;
-    free(task_);
-    queue->front=se_task;
-  }
-  free(queue->end);
-  free(queue);
-}
-
-int create_thread(struct threadpool *pool, struct thread **pthread, int id)
-{
-  *pthread = (struct thread *)malloc(sizeof(struct thread));
-  if (pthread == NULL)
-  {
-    perror("creat_thread():could not allocate memory for thread\n");
-    return -1;
-  }
-  (*pthread)->pool = pool;
-  (*pthread)->id = id;
-  pthread_mutex_lock(&pool->thcont_lock);
-  (pool->num_threads)++;
-  pthread_mutex_unlock(&pool->thcont_lock);
-  
-  pthread_create(&(*pthread)->pthread,NULL,(void*)thread_do,(*pthread));
-  
-  pthread_detach((*pthread)->pthread);//无需等待
-  return 0;
-}
-
-task* take_taskqueue(taskqueue *queue){
-  if(!queue->has_jobs->status){
-    return NULL;
-  }
-  task* task_ = queue->front;
-  queue->front = task_->next;
-  (queue->len)--;
-  if(queue->len=0){
-    queue->has_jobs->status=false;
-  }
-  return task_;
-}
-
-void thread_do(thread* pthread){
-  char thread_name[128]={0};
-  sprintf(thread_name,"thread_pool_%d",pthread->id);
-  prctl(PR_SET_NAME,thread_name);
-
-  threadpool* pool = pthread->pool;
-  ////////
-  ////////
-  while(pool->is_alive){
-    /////////如果队列还有任务，则继续运行任务
-    // if(pool->queue.len!=0){
-    //   waitThreadPlool(pool);
-    // }
-    // //////////
-    if(pool->is_alive){
-      //////执行到此，表明线程还在工作，需要对工作线程数量进行统计
-      (pool->num_working)++;
-      ////////
-      void(*func)(void*);
-      void *arg;
-      task* curtask = take_taskqueue(&pool->queue);
-      if(curtask){
-        func = curtask->function;
-        arg = curtask->arg;
-        func(arg);
-        free(curtask->function);
-        free(curtask->arg);
-        free(curtask);
-      }
-      pthread_mutex_lock(&pool->thcont_lock);
-      pool->num_working--;
-      pthread_mutex_lock(&pool->thcont_lock);
-      pthread_mutex_lock(&pool->queue.mutex);
-      pool->queue.len--;
-      pthread_mutex_unlock(&pool->queue.mutex);
-      if(pool->num_working==0){
-        waitThreadPool(pool);
-      }
+void destroy_taskqueue(taskqueue *queue) {
+    while (queue->len) {
+        task *t = take_taskqueue(queue);
+        if (t) free(t);
     }
-  }
-  
+    pthread_mutex_destroy(&(queue->mutex));
+    pthread_mutex_destroy(&(queue->has_jobs->mutex));
+    pthread_cond_destroy(&(queue->has_jobs->cond));
+    free(queue->has_jobs);
 }
 
-int main()
-{
-  threadpool pool =*initThreadPool(10);
-  printf("%d\n",pool.num_threads);
-  return 0;
+void push_taskqueue(taskqueue *queue, task *curtask) {
+    pthread_mutex_lock(&(queue->mutex));
+    curtask->next = NULL;
+    if (queue->len == 0) {
+        queue->front = curtask;
+        queue->end = curtask;
+    } else {
+        queue->end->next = curtask;
+        queue->end = curtask;
+    }
+    queue->len++;
+    queue->has_jobs->status = true;
+    pthread_cond_signal(&(queue->has_jobs->cond));
+    pthread_mutex_unlock(&(queue->mutex));
+}
+
+task *take_taskqueue(taskqueue *queue) {
+    pthread_mutex_lock(&(queue->mutex));
+    task *curtask = queue->front;
+    if (queue->len > 0) {
+        queue->front = curtask->next;
+        queue->len--;
+        if (queue->len == 0) {
+            queue->end = NULL;
+            queue->has_jobs->status = false;
+        }
+    }
+    pthread_mutex_unlock(&(queue->mutex));
+    return curtask;
+}
+
+void *thread_do(void *arg) {
+    thread *thr = (thread *)arg;
+    threadpool *pool = thr->pool;
+
+    while (pool->is_alive) {
+        pthread_mutex_lock(&(pool->queue.has_jobs->mutex));
+        while (pool->queue.has_jobs->status == false && pool->is_alive) {
+            pthread_cond_wait(&(pool->queue.has_jobs->cond), &(pool->queue.has_jobs->mutex));
+        }
+        pthread_mutex_unlock(&(pool->queue.has_jobs->mutex));
+
+        if (pool->is_alive) {
+            pthread_mutex_lock(&(pool->thcont_lock));
+            pool->num_working++;
+            pthread_mutex_unlock(&(pool->thcont_lock));
+
+            task *curtask = take_taskqueue(&(pool->queue));
+            if (curtask) {
+                curtask->function(curtask->arg);
+                free(curtask->arg);  // 释放任务参数
+                free(curtask);  // 释放任务
+            }
+
+            pthread_mutex_lock(&(pool->thcont_lock));
+            pool->num_working--;
+            if (pool->num_working == 0) {
+                pthread_cond_signal(&(pool->threads_all_idle));
+            }
+            pthread_mutex_unlock(&(pool->thcont_lock));
+        }
+    }
+    pthread_mutex_lock(&(pool->thcont_lock));
+    pool->num_threads--;
+    pthread_mutex_unlock(&(pool->thcont_lock));
+    return NULL;
+}
+
+int create_thread(threadpool *pool, thread **pthread, int id) {
+    *pthread = (thread *)malloc(sizeof(thread));
+    if (*pthread == NULL) {
+        return -1;
+    }
+    (*pthread)->pool = pool;
+    (*pthread)->id = id;
+    pthread_create(&((*pthread)->pthread), NULL, thread_do, (*pthread));
+    pthread_detach((*pthread)->pthread);
+    return 0;
+}
+
+struct threadpool *initThreadPool(int num_threads) {
+    threadpool *pool = (threadpool *)malloc(sizeof(threadpool));
+    pool->num_threads = 0;
+    pool->num_working = 0;
+    pool->is_alive = true;
+    pthread_mutex_init(&(pool->thcont_lock), NULL);
+    pthread_cond_init(&(pool->threads_all_idle), NULL);
+    init_taskqueue(&(pool->queue));
+    pool->threads = (thread **)malloc(num_threads * sizeof(thread *));
+    for (int i = 0; i < num_threads; i++) {
+        create_thread(pool, &(pool->threads[i]), i);
+        pool->num_threads++;
+    }
+    return pool;
+}
+
+void addTask2ThreadPool(threadpool *pool, task *curtask) {
+    push_taskqueue(&(pool->queue), curtask);
+}
+
+void waitThreadPool(threadpool *pool) {
+    pthread_mutex_lock(&(pool->thcont_lock));
+    while (pool->queue.len || pool->num_working) {
+        pthread_cond_wait(&(pool->threads_all_idle), &(pool->thcont_lock));
+    }
+    pthread_mutex_unlock(&(pool->thcont_lock));
+}
+
+void destroyThreadPool(threadpool *pool) {
+    pool->is_alive = false;
+    pthread_mutex_lock(&(pool->queue.has_jobs->mutex));
+    pthread_cond_broadcast(&(pool->queue.has_jobs->cond));
+    pthread_mutex_unlock(&(pool->queue.has_jobs->mutex));
+
+    for (int i = 0; i < pool->num_threads; i++) {
+        free(pool->threads[i]);
+    }
+    free(pool->threads);
+    destroy_taskqueue(&(pool->queue));
+    pthread_mutex_destroy(&(pool->thcont_lock));
+    pthread_cond_destroy(&(pool->threads_all_idle));
+    free(pool);
+}
+
+int getNumofThreadWorking(threadpool *pool) {
+    pthread_mutex_lock(&(pool->thcont_lock));
+    int num = pool->num_working;
+    pthread_mutex_unlock(&(pool->thcont_lock));
+    return num;
 }
