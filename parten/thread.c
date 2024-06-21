@@ -1,8 +1,5 @@
 #include<stdlib.h>
 #include"thread.h"
-#include <sys/time.h>
-// performance_data perf_data;
-
 void init_taskqueue(taskqueue *queue) {
     queue->len = 0;
     queue->front = NULL;
@@ -55,15 +52,10 @@ task *take_taskqueue(taskqueue *queue) {
     pthread_mutex_unlock(&(queue->mutex));
     return curtask;
 }
-char *get_time() {
-  time_t time_now;
-  time(&time_now);
-  return ctime(&time_now);
-}
+
 void *thread_do(void *arg) {
     thread *thr = (thread *)arg;
     threadpool *pool = thr->pool;
-    struct timeval start, end;
 
     while (pool->is_alive) {
         pthread_mutex_lock(&(pool->queue.has_jobs->mutex));
@@ -73,6 +65,7 @@ void *thread_do(void *arg) {
         pthread_mutex_unlock(&(pool->queue.has_jobs->mutex));
 
         if (pool->is_alive) {
+            pthread_mutex_lock(&(pool->thcont_lock));
             pool->num_working++;
             pthread_mutex_unlock(&(pool->thcont_lock));
 

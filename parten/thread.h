@@ -1,5 +1,9 @@
+#ifndef THREAD_H
+#define THREAD_H
+
 #include <stdbool.h>
 #include <pthread.h>
+
 typedef struct staconv {
     pthread_mutex_t mutex;
     pthread_cond_t cond;
@@ -36,6 +40,17 @@ typedef struct threadpool {
     volatile bool is_alive;
 } threadpool;
 
+typedef struct {
+    double total_active_time;
+    double total_block_time;
+    int max_active_threads;
+    int min_active_threads;
+    int total_threads;
+    int active_threads;
+    int queue_length;
+    pthread_mutex_t lock;
+} performance_data;
+
 void init_taskqueue(taskqueue *queue);
 struct threadpool *initThreadPool(int num_threads);
 void push_taskqueue(taskqueue *queue, task *curtask);
@@ -47,3 +62,5 @@ int create_thread(struct threadpool *pool, struct thread **pthread, int id);
 void destroy_taskqueue(taskqueue *queue);
 task* take_taskqueue(taskqueue *queue);
 void *thread_do(void *arg);
+
+#endif // THREAD_H

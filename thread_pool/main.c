@@ -7,12 +7,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
-#include <semaphore.h>
-#include <sys/prctl.h>
 #include <string.h>
 #include"thread.h"
 #define VERSION 23
@@ -266,8 +263,4 @@ int main(int argc, char **argv) {
 
     }
   }
-  waitThreadPool(pool);
-  // 销毁线程池
-  destroyThreadPool(pool);
-  return 0;
 }

@@ -1,1 +1,1 @@
-gcc -o server pool.c main.c -pthread
+gcc -o server thread.c main.c -pthread
