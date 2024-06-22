@@ -31,6 +31,20 @@ typedef struct {
   char *filetype;
 } extension;
 
+typedef struct {
+    int fd;
+    int hit;
+    char buffer[BUFSIZE + 1];
+    int buffer_len;
+    char *fstr;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+    int file_fd;
+    long file_size;
+    int read_done;
+    int header_sent;
+} shared_data_t;
+
 extern extension extensions[];
 
 extern threadpool *ReadFilePool;

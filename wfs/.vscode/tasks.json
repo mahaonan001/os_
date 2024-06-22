@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "main.c",
+                "wfs.c",                       // 明确列出所有源文件
+                "-o",
+                "${workspaceFolder}/wfs"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "Generated task by Debugger."
+        }
+    ]
+}

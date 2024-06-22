@@ -1,32 +1,61 @@
-Fri Jun 21 00:37:12 2024 INFO: read_msg:this is read func:1
-Fri Jun 21 00:37:12 2024 INFO: request:GET /?vscodeBrowserReqId=1718901432365 HTTP/1.1**Host: localhost:36985**Connection: keep-alive**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.90.1 Chrome/122.0.6261.156 Electron/29.4.0 Safari/537.36**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: cross-site**Sec-Fetch-Mode: navigate**Sec-Fetch-Dest: iframe**Accept-Encoding: gzip, deflate, br**Accept-Language: zh-CN****:1
-Fri Jun 21 00:37:12 2024 INFO: request:GET /?vscodeBrowserReqId=1718901432365:1
-Fri Jun 21 00:37:12 2024 FORBIDDEN: file extension type not supported:GET /?vscodeBrowserReqId=1718901432365
-Fri Jun 21 00:37:12 2024 INFO: read_msg:this is read func:2
-Fri Jun 21 00:37:48 2024 ERROR: system call:bind Errno=98 exiting pid=147599
-Fri Jun 21 00:37:54 2024 INFO: read_msg:this is read func:1
-Fri Jun 21 00:38:08 2024 INFO: request:GET /index.html HTTP/1.1**Host: localhost:50419**Connection: keep-alive**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Windows"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:1
-Fri Jun 21 00:38:08 2024 INFO: request:GET /index.html:1
-Fri Jun 21 00:38:08 2024 INFO: filetype:text/html:1
-Fri Jun 21 00:38:08 2024 INFO: /index.html:this is read_file func:0
-Fri Jun 21 00:38:08 2024 INFO: SEND:/index.html:1
-Fri Jun 21 00:38:08 2024 INFO: Header:HTTP/1.1 200 OK
+Fri Jun 21 14:22:20 2024 INFO: request:GET / HTTP/1.1**Host: localhost:8181**Connection: keep-alive**Cache-Control: max-age=0**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Windows"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:3
+Fri Jun 21 14:22:20 2024 INFO: request:GET /:3
+Fri Jun 21 14:22:20 2024 INFO: filetype:text/html:3
+Fri Jun 21 14:22:20 2024 INFO: /index.html:this is read_file func:0
+Fri Jun 21 14:22:20 2024 INFO: SEND:/index.html:3
+Fri Jun 21 14:22:20 2024 INFO: Header:HTTP/1.1 200 OK
 Server: nweb/23.0
 Content-Length: 0
+Connection: close
+Content-Type: text/html
+
+:3
+Fri Jun 21 14:22:21 2024 INFO: read_msg:this is read func:1
+Fri Jun 21 14:22:21 2024 INFO: request:GET /favicon.ico HTTP/1.1**Host: localhost:8181**Connection: keep-alive**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**sec-ch-ua-platform: "Windows"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://localhost:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:4
+Fri Jun 21 14:22:21 2024 INFO: request:GET /favicon.ico:4
+Fri Jun 21 14:22:21 2024 INFO: filetype:image/ico:4
+Fri Jun 21 14:22:21 2024 INFO: /favicon.ico:this is read_file func:0
+Fri Jun 21 14:22:21 2024 INFO: SEND:/favicon.ico:4
+Fri Jun 21 14:22:21 2024 INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 0
+Connection: close
+Content-Type: image/ico
+
+:4
+Fri Jun 21 14:22:44 2024 INFO: read_msg:this is read func:1
+Fri Jun 21 14:22:44 2024 INFO: request:GET / HTTP/1.1**Host: localhost:8181**Connection: keep-alive**Cache-Control: max-age=0**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Windows"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:5
+Fri Jun 21 14:22:44 2024 INFO: request:GET /:5
+Fri Jun 21 14:22:44 2024 INFO: filetype:text/html:5
+Fri Jun 21 14:22:44 2024 INFO: /index.html:this is read_file func:0
+Fri Jun 21 14:22:44 2024 INFO: SEND:/index.html:5
+Fri Jun 21 14:22:44 2024 INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 0
+Connection: close
+Content-Type: text/html
+
+:5
+Fri Jun 21 14:22:45 2024 INFO: read_msg:this is read func:1
+Fri Jun 21 14:22:45 2024 INFO: request:GET /favicon.ico HTTP/1.1**Host: localhost:8181**Connection: keep-alive**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**sec-ch-ua-platform: "Windows"**Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8**Sec-Fetch-Site: same-origin**Sec-Fetch-Mode: no-cors**Sec-Fetch-Dest: image**Referer: http://localhost:8181/**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:6
+Fri Jun 21 14:22:45 2024 INFO: request:GET /favicon.ico:6
+Fri Jun 21 14:22:45 2024 INFO: filetype:image/ico:6
+Fri Jun 21 14:22:45 2024 INFO: /favicon.ico:this is read_file func:0
+Fri Jun 21 14:22:45 2024 INFO: SEND:/favicon.ico:6
+Fri Jun 21 14:22:45 2024 INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 0
+Connection: close
+Content-Type: image/ico
+
+:6
+Fri Jun 21 14:22:46 2024 INFO: read_msg:this is read func:1
+Fri Jun 21 14:40:29 2024 ERROR: system call:bind Errno=98 exiting pid=48390
+Fri Jun 21 14:40:34 2024 INFO: request:GET / HTTP/1.1**Host: localhost:43751**Connection: keep-alive**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Windows"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:1
+Fri Jun 21 14:40:34 2024 INFO: Header:HTTP/1.1 200 OK
+Server: nweb/23.0
+Content-Length: 296
 Connection: close
 Content-Type: text/html
 
 :1
-Fri Jun 21 00:38:09 2024 INFO: read_msg:this is read func:1
-Fri Jun 21 00:38:09 2024 INFO: request:GET / HTTP/1.1**Host: localhost:50419**Connection: keep-alive**sec-ch-ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"**sec-ch-ua-mobile: ?0**sec-ch-ua-platform: "Windows"**Upgrade-Insecure-Requests: 1**User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0**Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7**Sec-Fetch-Site: none**Sec-Fetch-Mode: navigate**Sec-Fetch-User: ?1**Sec-Fetch-Dest: document**Accept-Encoding: gzip, deflate, br, zstd**Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6****:2
-Fri Jun 21 00:38:09 2024 INFO: request:GET /:2
-Fri Jun 21 00:38:09 2024 INFO: filetype:text/html:2
-Fri Jun 21 00:38:09 2024 INFO: /index.html:this is read_file func:0
-Fri Jun 21 00:38:09 2024 INFO: SEND:/index.html:2
-Fri Jun 21 00:38:09 2024 INFO: Header:HTTP/1.1 200 OK
-Server: nweb/23.0
-Content-Length: 0
-Connection: close
-Content-Type: text/html
-
-:2

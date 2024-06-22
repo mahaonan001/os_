@@ -7,10 +7,39 @@
 #include <netinet/in.h>
 #include <string.h>
 #include "web.h"
+threadpool *pool = NULL;
 threadpool *ReadFilePool = NULL;
 threadpool *SendMsgPool = NULL;
+
+void web(void *data) {
+    web_request_t param = *((web_request_t *)data);
+    shared_data_t *shared = malloc(sizeof(shared_data_t));
+    shared->fd = param.fd;
+    shared->hit = param.hit;
+    shared->read_done = 0;
+    shared->header_sent = 0;
+    pthread_mutex_init(&shared->mutex, NULL);
+    pthread_cond_init(&shared->cond, NULL);
+
+    task *task_read_msg = malloc(sizeof(task));
+    task_read_msg->function = read_msg;
+    task_read_msg->arg = shared;
+
+    task *task_send_msg = malloc(sizeof(task));
+    task_send_msg->function = send_msg;
+    task_send_msg->arg = shared;
+
+    task *task_read_file = malloc(sizeof(task));
+    task_read_file->function = read_file;
+    task_read_file->arg = shared;
+
+    addTask2ThreadPool(pool, task_read_msg);
+    addTask2ThreadPool(ReadFilePool, task_send_msg);
+    addTask2ThreadPool(SendMsgPool, task_read_file);
+}
+
 int main(int argc, char **argv) {
-  threadpool *pool = initThreadPool(NUMTHREAD); // 修改为指针
+  pool = initThreadPool(NUMTHREAD); // 修改为指针
   ReadFilePool = initThreadPool(NUMTHREAD);
   SendMsgPool = initThreadPool(NUMTHREAD);
   int i, port, listenfd, socketfd, hit;
@@ -80,11 +109,28 @@ int main(int argc, char **argv) {
     web_request_t *param=malloc(sizeof(web_request_t));
     param->hit = hit;
     param->fd = socketfd;
-    // task *curtask = (task *)malloc(sizeof(task));
-    // curtask->function = read_msg;
-    // curtask->arg = malloc(sizeof(param));
-    // *((web_request_t*)curtask->arg) = *param;
-    // addTask2ThreadPool(pool, curtask);
-    read_msg(param);
+    shared_data_t *shared = malloc(sizeof(shared_data_t));
+    shared->fd = param->fd;
+    shared->hit = param->hit;
+    shared->read_done = 0;
+    shared->header_sent = 0;
+    pthread_mutex_init(&shared->mutex, NULL);
+    pthread_cond_init(&shared->cond, NULL);
+
+    task *task_read_msg = malloc(sizeof(task));
+    task_read_msg->function = read_msg;
+    task_read_msg->arg = shared;
+
+    task *task_send_msg = malloc(sizeof(task));
+    task_send_msg->function = send_msg;
+    task_send_msg->arg = shared;
+
+    task *task_read_file = malloc(sizeof(task));
+    task_read_file->function = read_file;
+    task_read_file->arg = shared;
+
+    addTask2ThreadPool(pool, task_read_msg);
+    addTask2ThreadPool(pool, task_send_msg);
+    addTask2ThreadPool(pool, task_read_file);
   }
 }
